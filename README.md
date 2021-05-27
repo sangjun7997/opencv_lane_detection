@@ -6,7 +6,7 @@ Lane Detection Code using OpenCV-Python
 
 ## install libraries
 ```
-pip install opencv-python numpy math matplotlib calibration collections
+pip install requirements.txt
 ```
 
 
