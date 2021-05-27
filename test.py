@@ -58,7 +58,7 @@ def sliding_window(frame):
             cv2.rectangle(frame_color, left_p1, left_p2, (0,0,255), 2)
 
         if np.max(left_score) == 0:
-            left_grid = left_grid+2
+            left_grid = 5
         else:
             leftx_current = leftx_current-int(left_grid/2)+np.argmax(left_score)
             left_grid = 3
@@ -70,7 +70,7 @@ def sliding_window(frame):
             cv2.rectangle(frame_color, right_p1, right_p2, (255,0,0), 2)
 
         if np.max(right_score) == 0:
-            right_grid = right_grid+2
+            right_grid = 5
         else:
             rightx_current = rightx_current-int(right_grid/2)+np.argmax(right_score)
             right_grid = 3
