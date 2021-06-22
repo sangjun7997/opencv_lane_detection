@@ -13,5 +13,5 @@ pip install -r requirements.txt
 
 ## start
 ```
-python test.py
+python detection.py
 ```
