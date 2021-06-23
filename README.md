@@ -1,27 +1,23 @@
 # opencv_lane_detection
-
 Lane Detection Code using OpenCV-Python
-
-
+   
 ## Install libraries
 ```
 pip install -r requirements.txt
 ```
-
-
+   
 ## Start
 ```
 python detection.py
 ```
-
-
+   
 # Algorithm
 1. Camera Reading / Video Reading
 2. Perspective Transformation (Bird's eye View)
 3. Filtering
 4. Sliding Window
 5. Reverse Perspective Transformation (Top View)
-
+   
 ## Perspective Transformation
 ```python
 def bird_eye_view(frame):
@@ -32,6 +28,7 @@ def bird_eye_view(frame):
     frame = cv2.warpPerspective(frame, matrix, (x_size, y_size))
     return frame
 ```
+   
 ## Filtering
 ### Edge Filtering
 ```python
@@ -50,6 +47,7 @@ def scharr_filter(frame):
     _, white_line = cv2.threshold(img_scharr, 150, 255, cv2.THRESH_BINARY)
     return white_line
 ```
+   
 ### Color Filtering
 ```python
 def yellow_and_white_filter(image):
@@ -75,6 +73,7 @@ def yellow_and_white_filter(image):
     
     return white_image, yellow_image, out
 ```
+   
 #### White Filtering
 ```python
     # Filter white pixels
@@ -84,6 +83,7 @@ def yellow_and_white_filter(image):
     white_mask = cv2.inRange(image, lower_white, upper_white)
     white_image = cv2.bitwise_and(image, image, mask=white_mask)
 ```
+   
 #### Yellow Filtering
 ```python
     # Filter yellow pixels
@@ -93,6 +93,7 @@ def yellow_and_white_filter(image):
     yellow_mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
     yellow_image = cv2.bitwise_and(image, image, mask=yellow_mask)
 ```
+   
 ### Thickening
 ```python
 # setp3-3. thickening detected lane
@@ -100,11 +101,13 @@ kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
 thickened_color_filtered_img = cv2.dilate(color_filtered_img, kernel)
 cv2.imshow('3-3. thickened', thickened_color_filtered_img)
 ```
+   
 ### Median Blur
 ```python
 # step3-5. Median blur
 median_img=cv2.medianBlur(filtered_img, 5)
 ```
+   
 ## Sliding Window
 ```python
 def sliding_window(frame, search_point):
@@ -240,6 +243,7 @@ def sliding_window(frame, search_point):
 
     return frame_color, left_line, right_line, next_search
 ```
+   
 ## Reverse Perspective Transformation
 ```python
 def top_view(frame):
@@ -250,5 +254,6 @@ def top_view(frame):
     frame = cv2.warpPerspective(frame, matrix_inv, (x_size, y_size))
     return frame
 ```
+   
 # Result
-<img width="80%" src="https://user-images.githubusercontent.com/69493518/123046806-82f02c80-d437-11eb-82d4-d92f51752350.gif"/>
+<img width="100%" src="https://user-images.githubusercontent.com/69493518/123046806-82f02c80-d437-11eb-82d4-d92f51752350.gif"/>
