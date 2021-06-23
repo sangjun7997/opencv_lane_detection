@@ -216,12 +216,12 @@ def yellow_and_white_filter(image):
     return white_image, yellow_image, out
             
 if __name__=='__main__':
-    #cap1=cv2.VideoCapture(0)
-    cap1 = cv2.VideoCapture(input_name)
+    #cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(input_name)
 
-    while(cap1.isOpened()):
+    while(cap.isOpened()):
         # step0. Read frame
-        ret,frame=cap1.read()
+        ret, frame = cap.read()
 
         # step1. Resize image (Calibration skip)
         frame = cv2.resize(frame, (x_size, y_size))
