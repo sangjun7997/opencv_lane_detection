@@ -18,7 +18,7 @@ python detection.py
 4. Sliding Window
 5. Reverse Perspective Transformation (Top View)
    
-## Perspective Transformation
+## 1. Perspective Transformation
 ```python
 def bird_eye_view(frame):
     # set ROI
@@ -29,8 +29,8 @@ def bird_eye_view(frame):
     return frame
 ```
    
-## Filtering
-### Edge Filtering
+## 2. Filtering
+### 2-1. Edge Filtering
 ```python
 def scharr_filter(frame):
     img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -48,7 +48,7 @@ def scharr_filter(frame):
     return white_line
 ```
    
-### Color Filtering
+### 2-2. Color Filtering
 ```python
 def yellow_and_white_filter(image):
     """
@@ -74,7 +74,7 @@ def yellow_and_white_filter(image):
     return white_image, yellow_image, out
 ```
    
-#### White Filtering
+#### 2-2-1. White Filtering
 ```python
     # Filter white pixels
     white_threshold = 180 #130
@@ -84,7 +84,7 @@ def yellow_and_white_filter(image):
     white_image = cv2.bitwise_and(image, image, mask=white_mask)
 ```
    
-#### Yellow Filtering
+#### 2-2-2. Yellow Filtering
 ```python
     # Filter yellow pixels
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -94,7 +94,7 @@ def yellow_and_white_filter(image):
     yellow_image = cv2.bitwise_and(image, image, mask=yellow_mask)
 ```
    
-### Thickening
+### 2-3. Thickening
 ```python
 # setp3-3. thickening detected lane
 kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
@@ -102,13 +102,13 @@ thickened_color_filtered_img = cv2.dilate(color_filtered_img, kernel)
 cv2.imshow('3-3. thickened', thickened_color_filtered_img)
 ```
    
-### Median Blur
+### 2-4. Median Blur
 ```python
 # step3-5. Median blur
 median_img=cv2.medianBlur(filtered_img, 5)
 ```
    
-## Sliding Window
+## 3. Sliding Window
 ```python
 def sliding_window(frame, search_point):
     frame_color = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
@@ -243,8 +243,10 @@ def sliding_window(frame, search_point):
 
     return frame_color, left_line, right_line, next_search
 ```
+### 3.1. Concept
+
    
-## Reverse Perspective Transformation
+## 4. Reverse Perspective Transformation
 ```python
 def top_view(frame):
     # set RoI
