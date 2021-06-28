@@ -148,8 +148,9 @@ median_img=cv2.medianBlur(filtered_img, 5)
         left_point_exist = False
         right_point_exist = False
 ```
-- Start searching from bottom of frame to top.
-   
+- Start searching from bottom to top of the frame.
+- Each searching calculation ...
+    
 ```python
         # search white pixel of left side of image
         for left in range(left_grid):
@@ -167,7 +168,6 @@ median_img=cv2.medianBlur(filtered_img, 5)
             left_grid = 3                                                               # set number of searching window of next frame to 3
             left_point_exist = True
 ```
-- 
    
 ### 3.4. 
    
