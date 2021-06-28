@@ -109,31 +109,14 @@ median_img=cv2.medianBlur(filtered_img, 5)
 ```
    
 ## 3. Sliding Window
+### 3.1. Initializing Parameters
+<img width="50%" src="https://user-images.githubusercontent.com/69493518/123618346-11531c80-d843-11eb-95cb-3f1fd3562be0.png"/>
+   
+- margin_x = w
+- margin_y = h
+   
+### 3.2. Set Starting Points
 ```python
-def sliding_window(frame, search_point):
-    frame_color = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
-    
-    # grid number
-    grid_x = 20
-    grid_y = 10
-
-    # grid number for searching
-    left_grid = 3
-    right_grid = 3
-
-    # search starting point of next frame
-    next_search = [0,0]
-
-    # grid size
-    margin_x = frame.shape[1] / grid_x
-    margin_y = frame.shape[0] / grid_y
-
-    # histogram of white pixel to get search starting point of left, right lane
-    histogram = np.sum(frame[:,:], axis=0)
-
-    # get midpoint of image and it become boundary of left and right lane
-    midpoint = int(histogram.shape[0]/2)
-
     # search starting point from histogram
     leftx_base = np.argmax(histogram[:midpoint])
     rightx_base = np.argmax(histogram[midpoint:]) + midpoint
@@ -148,12 +131,14 @@ def sliding_window(frame, search_point):
     # from leftx_base and rightx_base, get index of searching window
     leftx_current = int(leftx_base/margin_x)
     rightx_current = int(rightx_base/margin_x)
-
-    # list of lane point
-    left_line = []
-    right_line = []
-
-    # start searching lane from bottom of image to top
+```
+- Set searching start points as 'leftx_base' and 'right_base' from histogram of frame.
+- Get 'leftx_base' from left side and 'rightx_base' from right side of frame.
+- If two 'search_point'(hint from previous frame) are in range, set start points to them.
+- And index of searching start window is calculated from those points. 
+   
+### 3.3. Start Searching
+```python
     for grid in range(grid_y):
         # white pixels of each window are calculated to score
         left_score = []
@@ -162,8 +147,10 @@ def sliding_window(frame, search_point):
         # first, assume that there are no lane point
         left_point_exist = False
         right_point_exist = False
-
-
+```
+- Start searching from bottom of frame to top.
+   
+```python
         # search white pixel of left side of image
         for left in range(left_grid):
             left_p1 = (int(margin_x * (leftx_current + left - int(left_grid / 2))), int(margin_y * (grid_y - grid - 1)))
@@ -179,74 +166,10 @@ def sliding_window(frame, search_point):
             leftx_current = leftx_current - int(left_grid / 2) + np.argmax(left_score)  # set searching point of upper window
             left_grid = 3                                                               # set number of searching window of next frame to 3
             left_point_exist = True
-
-
-        # search white pixel of right side of image
-        for right in range(right_grid):
-            right_p1 = (int(margin_x * (rightx_current + right - int(right_grid / 2))), int(margin_y * (grid_y - grid - 1)))
-            right_p2 = (int(margin_x * (rightx_current + right - int(right_grid / 2) + 1)), int(margin_y * (grid_y - grid)))
-            right_score.append(grid_score(frame, right_p1, right_p2))       # calculate white pixel score of each window and append it to list
-            cv2.rectangle(frame_color, right_p1, right_p2, blue_color, 2)   # draw window
-        
-        # if there are no white pixel in right side
-        if np.max(right_score) == 0:
-            right_grid = 5  # set number of searching window of next frame to 5
-        # if there are white pixel in right side
-        else:
-            rightx_current = rightx_current - int(right_grid / 2) + np.argmax(right_score)  # set searching point of upper window
-            right_grid = 3                                                                  # set number of searching window of next frame to 3
-            right_point_exist = True
-        
-        # set left and right lane points
-        left_point = (int(margin_x * leftx_current + margin_x / 2), int(margin_y * (grid_y - grid - 1) + margin_y / 2))
-        right_point = (int(margin_x * rightx_current + margin_x / 2), int(margin_y * (grid_y - grid - 1) + margin_y / 2))
-
-        # if right_point and left point are close each other, choice one point that have more points before
-        if (right_point[0] - left_point[0]) < 200:
-            if len(left_line) < len(right_line):
-                left_point_exist = False
-            elif len(left_line) > len(right_line):
-                right_point_exist = False
-
-        if left_point_exist == True:
-            # draw left point
-            cv2.line(frame_color, left_point, left_point, red_color, 10)
-            if right_point_exist == True:
-                # left point O, right point O
-                cv2.line(frame_color, right_point, right_point, blue_color, 10) # draw right point
-                # if calculated left point is in range
-                if right_point[0] < x_size:
-                    right_line.append(right_point)  # append it to list
-            else:
-                # left point O, right point X
-                # assume that left lane is curved lane, and reinforce searching of left lane
-                left_grid = 5
-            # if calculated left point is in range
-            if left_point[0] > 0:
-                left_line.append(left_point)    # append it to list
-        else:
-            if right_point_exist == True:
-                # left point X, right point O
-                # assume that right lane is curved lane, and reinforce searching of right lane
-                right_grid = 5
-                cv2.line(frame_color, right_point, right_point, blue_color, 10) # draw right point
-                # if calculated right point is in range
-                if right_point[0] < x_size:
-                    right_line.append(right_point)  # append it to list
-        
-        # lane points of second window from bottom of image are saved to help next frame to set searching point
-        if grid == 1:
-            if left_point_exist == True:
-                next_search[0] = left_point[0]
-            if right_point_exist == True:
-                next_search[1] = right_point[0]
-
-    return frame_color, left_line, right_line, next_search
 ```
-### 3.1. Initializing Parameters
-
-### 3.2. Concept
-
+- 
+   
+### 3.4. 
    
 ## 4. Reverse Perspective Transformation
 ```python
