@@ -243,7 +243,9 @@ def sliding_window(frame, search_point):
 
     return frame_color, left_line, right_line, next_search
 ```
-### 3.1. Concept
+### 3.1. Initializing Parameters
+
+### 3.2. Concept
 
    
 ## 4. Reverse Perspective Transformation
